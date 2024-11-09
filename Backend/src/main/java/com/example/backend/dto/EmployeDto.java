@@ -1,24 +1,30 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.Employe;
+import com.example.backend.model.Groupe;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class EmployeDto implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long codeEmploye;
     private String nomEmploye;
 
-    @ManyToMany
-    @JoinTable(name = "EMP_GR")
-    private Collection<GroupeDto> groupes;
 
-    @ManyToOne
-    @JoinColumn(name = "code_emp_sup")
-    private EmployeDto employeSup;
+    private Collection<Groupe> groupes;
+
+
+    private Employe employeSup;
 
 
 

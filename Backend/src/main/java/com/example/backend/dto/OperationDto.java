@@ -1,25 +1,26 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.Compte;
+import com.example.backend.model.Employe;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class OperationDto implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long numeroOperacion;
     private Date dateOperation ;
     private double montant ;
-
-    @ManyToOne
-    @JoinColumn(name="CODE_CPTE")
-    private CompteDto compte;
-
-    @ManyToOne
-    @JoinColumn(name="CODE_EMP")
-    private EmployeDto employe;
-
-
+    private Compte compte;
+    private Employe employe;
 }

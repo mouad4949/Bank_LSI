@@ -1,17 +1,24 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.Compte;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Collection;
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 
 public class ClientDto implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long codeClient ;
     private String nomClient ;
 
-    @OneToMany(mappedBy="client" , fetch = FetchType.LAZY)
-    private Collection<CompteDto> comptes;
+
+    private Collection<Compte> comptes;
 }

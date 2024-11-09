@@ -1,14 +1,22 @@
 package com.example.backend.model;
 
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder  // Utilisation de SuperBuilder pour la classe abstraite
+@Data
 public abstract class Compte implements Serializable {
+
     @Id
     private String codeCompte;
     private Date dateCreation;
@@ -24,7 +32,4 @@ public abstract class Compte implements Serializable {
 
     @OneToMany(mappedBy = "compte")
     private Collection<Operation> operations;
-
-
-
 }

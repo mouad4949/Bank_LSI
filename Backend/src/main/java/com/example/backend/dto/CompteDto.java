@@ -1,29 +1,37 @@
 package com.example.backend.dto;
 
 
+import com.example.backend.model.Client;
+import com.example.backend.model.Employe;
+import com.example.backend.model.Operation;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public abstract class CompteDto implements Serializable {
-    @Id
+
     private String codeCompte;
     private Date dateCreation;
     private Double solde;
 
-    @ManyToOne
-    @JoinColumn(name = "CODE_CLI")
-    private ClientDto client;
 
-    @ManyToOne
-    @JoinColumn(name = "CODE_EMP")
-    private EmployeDto employe;
 
-    @OneToMany(mappedBy = "compte")
-    private Collection<OperationDto> operations;
+    private Client client;
+
+    private Employe employe;
+
+    private Collection<Operation> operations;
 
 
 
