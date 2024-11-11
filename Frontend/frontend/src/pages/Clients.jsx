@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Clients = () => {
-  const data = [
-    { company: 'Louis Vuitton', userId: '20010510', type: 'Customer', industry: 'Accessories' },
-    { company: 'Apple', userId: '20010511', type: 'Partner', industry: 'Electronics' },
-    { company: 'Johnson', userId: '20010512', type: 'Customer', industry: 'Telecommunications' },
-    { company: 'Starbucks', userId: '20010513', type: 'Reseller', industry: 'Retail' },
-  ];
+
+  const [data, setData] = useState([]);
+  
+  const [values, setValues] = useState({
+    nomClient: "",
+  });
+
+
+
+  const fetchClients = async () => {
+      const response = await axios.get('http://localhost:8080/api/client/get-all-clients');
+      // if (response.data.Status === 'Success') {
+      //   setData(response.data.Clients);
+      // } else {
+      //   alert(response.data.Error);
+      // }
+      setData(response.data);
+  };
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
 
   const data2 = [
     {
@@ -31,15 +48,15 @@ const Clients = () => {
       ],
     },
     {
-        company: "Apple",
-        userId: "20010511",
-        type: "Partner",
-        industry: "Electronics",
-        accounts: [
-          { type: "Compte Courant", balance: 2000 },
-          { type: "Compte Epargne", balance: 10000 },
-        ],
-      },
+      company: "Apple",
+      userId: "20010511",
+      type: "Partner",
+      industry: "Electronics",
+      accounts: [
+        { type: "Compte Courant", balance: 2000 },
+        { type: "Compte Epargne", balance: 10000 },
+      ],
+    },
   ];
 
   const [showModal, setShowModal] = useState(false);
@@ -74,6 +91,20 @@ const Clients = () => {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:8080/api/client', values);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.code === 'ERR_NETWORK') {
+        console.error('CORS error:', error);
+        alert('Sorry, there was a problem connecting to the server. Please try again later.');
+      } else {
+        console.error('Unexpected error:', error);
+        alert('An unexpected error occurred. Please try again later.');
+      }
+    }
+  };
   return (
     <>
       <div className="flex justify-end">
@@ -97,7 +128,7 @@ const Clients = () => {
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
               <h2 className="text-lg font-bold mb-4">Ajouter un Client</h2>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label className="block text-gray-700 font-bold mb-2">
                     Nom de CLIENT
@@ -106,6 +137,7 @@ const Clients = () => {
                     type="text"
                     className="w-full p-2 border rounded-lg"
                     placeholder="Entrez le Nom du client"
+                    onChange={e => setValues({...values , nomClient: e.target.value})}
                   />
                 </div>
                 <div className="flex justify-end">
@@ -151,29 +183,67 @@ const Clients = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-300">
-                  {data.map((item, index) => (
-                    <tr key={index}>
-                      <td className="p-5 text-sm text-gray-900">{item.userId}</td>
-                      <td className="p-5 text-sm text-gray-900">{item.company}</td>
-                      <td className="p-5 text-sm text-gray-900 flex gap-2">
-                        <button onClick={() => handleDeleteClient(item.userId)} className="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-red-600 flex items-center">
-                          <svg className="w-5 h-5 text-red-500 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6 7v10h8V7H6zm8-3V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1H2v2h16V4h-4z" />
-                          </svg>
-                        </button>
-                      </td>
-                      <td>
-                        <div className="flex justify-center">
-                          <button
-                            className="p-2 mx-12 rounded-full text-white font-bold bg-blue-500 group transition-all duration-500 hover:bg-blue-600 flex items-center"
-                            onClick={() => handleOpenAccountPopup(item)}
-                          >
-                            Compte Courant
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {Array.isArray(data)
+                    ? data.map((item, index) => (
+                        <tr key={index}>
+                          <td className="p-5 text-sm text-gray-900">{item.codeClient}</td>
+                          <td className="p-5 text-sm text-gray-900">{item.nomClient}</td>
+                          <td className="p-5 text-sm text-gray-900 flex gap-2">
+                            <button
+                              onClick={() => handleDeleteClient(item.codeClient)}
+                              className="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-red-600 flex items-center"
+                            >
+                              <svg
+                                className="w-5 h-5 text-red-500 group-hover:text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M6 7v10h8V7H6zm8-3V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1H2v2h16V4h-4z" />
+                              </svg>
+                            </button>
+                          </td>
+                          <td>
+                            <div className="flex justify-center">
+                              <button
+                                className="p-2 mx-12 rounded-full text-white font-bold bg-blue-500 group transition-all duration-500 hover:bg-blue-600 flex items-center"
+                                onClick={() => handleOpenAccountPopup(item)}
+                              >
+                                Compte Courant
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    : Object.values(data).map((item, index) => (
+                        <tr key={index}>
+                          <td className="p-5 text-sm text-gray-900">{item.codeClient}</td>
+                          <td className="p-5 text-sm text-gray-900">{item.nomClient}</td>
+                          <td className="p-5 text-sm text-gray-900 flex gap-2">
+                            <button
+                              onClick={() => handleDeleteClient(item.codeClient)}
+                              className="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-red-600 flex items-center"
+                            >
+                              <svg
+                                className="w-5 h-5 text-red-500 group-hover:text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M6 7v10h8V7H6zm8-3V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1H2v2h16V4h-4z" />
+                              </svg>
+                            </button>
+                          </td>
+                          <td>
+                            <div className="flex justify-center">
+                              <button
+                                className="p-2 mx-12 rounded-full text-white font-bold bg-blue-500 group transition-all duration-500 hover:bg-blue-600 flex items-center"
+                                onClick={() => handleOpenAccountPopup(item)}
+                              >
+                                Compte Courant
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
               {showAccountPopup && selectedClient && (
