@@ -20,6 +20,6 @@ public class GroupeDto implements Serializable {
     private Long codeGroupe;
     private String nomGroup;
 
-    private Collection<Employe> employes;
+    private Collection<Long> employes;
 
 }

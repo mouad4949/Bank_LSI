@@ -1,4 +1,6 @@
 package com.example.backend.model;
 
-public class TypeCompte {
+public enum TypeCompte {
+    COURANT,
+    EPARGNE
 }

@@ -4,6 +4,7 @@ package com.example.backend.dto;
 import com.example.backend.model.Client;
 import com.example.backend.model.Employe;
 import com.example.backend.model.Operation;
+import com.example.backend.model.TypeCompte;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,20 +20,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public abstract class CompteDto implements Serializable {
+public  class CompteDto implements Serializable {
 
-    private String codeCompte;
+    private Long codeCompte;
     private Date dateCreation;
     private Double solde;
-
-
-
-    private Client client;
-
-    private Employe employe;
-
-    private Collection<Operation> operations;
-
-
+    @Enumerated(EnumType.STRING) // Utilise la valeur textuelle de l'énum
+    private TypeCompte type;
+    private Double decouvert;
+    private Double taux;
+//    private Client client;
+//    private Employe employe;
+//    private Collection<Operation> operations;
 
 }

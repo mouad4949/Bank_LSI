@@ -19,16 +19,22 @@ public class Operation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroOperacion;
-    private Date dateOperation ;
-    private double montant ;
+
+    private Date dateOperation;
+    private double montant;
 
     @ManyToOne
-    @JoinColumn(name="CODE_CPTE")
+    @JoinColumn(name = "CODE_CPTE_DEB")  // Relation avec le compte de l'opération
     private com.example.backend.model.Compte compte;
 
     @ManyToOne
-    @JoinColumn(name="CODE_EMP")
+    @JoinColumn(name = "CODE_CPTE_CRE", nullable = true)  // La colonne peut être nulle par défaut
+    private com.example.backend.model.Compte compte_cre;  // Relation avec le compte créateur de l'opération
+
+    @ManyToOne
+    @JoinColumn(name = "CODE_EMP")
     private com.example.backend.model.Employe employe;
 
-
+    @Enumerated(EnumType.STRING)
+    private TypeOperation type;
 }

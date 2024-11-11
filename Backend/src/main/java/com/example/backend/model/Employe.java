@@ -1,6 +1,8 @@
 package com.example.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonIgnoreProperties("groupes")
 public class Employe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +31,7 @@ public class Employe implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "code_emp_sup")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "employeSup"})
     private Employe employeSup;
 
 
