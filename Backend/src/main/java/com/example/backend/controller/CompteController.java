@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/compte")
 public class CompteController {
     private final CompteService compteService;

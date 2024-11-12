@@ -18,6 +18,8 @@ public class ClientDto implements Serializable {
 
     private Long codeClient ;
     private String nomClient ;
+    private String email;
+    private String password;
 
 
     private Collection<Compte> comptes;

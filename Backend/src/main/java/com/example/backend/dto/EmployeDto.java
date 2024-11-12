@@ -19,7 +19,8 @@ public class EmployeDto implements Serializable {
 
     private Long codeEmploye;
     private String nomEmploye;
-
+    private String email;
+    private String password;
 
     private Collection<Groupe> groupes;
 

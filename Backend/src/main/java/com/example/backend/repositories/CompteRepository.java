@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface CompteRepository extends JpaRepository<Compte, Long> {
     List<Compte> findAllByClient(Optional<Client> cli);
+
 }

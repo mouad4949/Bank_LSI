@@ -1,6 +1,6 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +22,6 @@ public class Groupe implements Serializable {
     private String nomGroup;
 
     @ManyToMany(mappedBy = "groupes")
-    @JsonManagedReference // Gestion de la sérialisation des employés
+    @JsonIgnore // Éviter la référence circulaire lors de la sérialisation
     private Collection<Employe> employes;
 }

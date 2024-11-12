@@ -95,6 +95,10 @@ public class CompteService {
             throw new RuntimeException("Le montant du virement doit être supérieur à zéro.");
         }
 
+        if(fromAccountId == toAccountId){
+            throw new RuntimeException("Transaction Impossible");
+        }
+
         // Récupère le compte source (compte débité)
         Compte fromAccount = compteRepository.findById(fromAccountId)
                 .orElseThrow(() -> new RuntimeException("Compte source introuvable avec l'ID : " + fromAccountId));
@@ -134,33 +138,39 @@ public class CompteService {
         operationRepository.save(operation);
     }
 
-    public double withdraw(Long CompteId, Long employeId, double amount) throws IOException {
+    public double withdraw(Long compteId, Long employeId, double amount) throws IOException {
 
         // Récupère le compte par son ID
-        Compte account = compteRepository.findById(CompteId)
-                .orElseThrow(() -> new RuntimeException("Compte introuvable avec l'ID : " + CompteId));
+        Compte account = compteRepository.findById(compteId)
+                .orElseThrow(() -> new RuntimeException("Compte introuvable avec l'ID : " + compteId));
 
         // Vérifie si le montant est positif
-        if (amount < 0) {
-            throw new RuntimeException("Votre Solde est insuffisant");
+        if (amount <= 0) {
+            throw new RuntimeException("Le montant doit être supérieur à zéro.");
         }
 
-        // Ajoute le montant au solde du compte
+        // Vérifie si le solde est suffisant
+        if (account.getSolde() < amount) {
+            throw new RuntimeException("Votre solde est insuffisant pour effectuer ce retrait.");
+        }
+
+        // Soustrait le montant du solde du compte
         account.setSolde(account.getSolde() - amount);
 
         // Sauvegarde le compte mis à jour
         compteRepository.save(account);
 
+        // Récupère l'employé par son ID
         Employe employe = employeRepository.findById(employeId)
                 .orElseThrow(() -> new RuntimeException("Employé introuvable avec l'ID : " + employeId));
 
-        // Crée une nouvelle opération
+        // Crée une nouvelle opération de type RETRAIT
         Operation operation = Operation.builder()
                 .dateOperation(new Date())  // La date actuelle
-                .montant(amount)  // Le montant déposé
-                .compte_cre(account)
-                .type(TypeOperation.RETRAIT)// Le compte associé à l'opération
-                .employe(employe)  // L'employé effectuant l'opération
+                .montant(amount)            // Le montant retiré
+                .compte(account)
+                .type(TypeOperation.RETRAIT)// Type de l'opération : RETRAIT
+                .employe(employe)           // Employé effectuant l'opération
                 .build();
 
         // Sauvegarde l'opération
@@ -171,6 +181,7 @@ public class CompteService {
     }
 
 
+
     public void deleteCompte(Long compteId) {
         compteRepository.deleteById(compteId);
     }
@@ -179,4 +190,3 @@ public class CompteService {
         return compteRepository.findAll();
     }
 }
-

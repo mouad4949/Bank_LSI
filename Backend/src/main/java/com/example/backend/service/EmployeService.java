@@ -24,6 +24,8 @@ public class EmployeService {
                 .codeEmploye(employeDto.getCodeEmploye())
                 .nomEmploye(employeDto.getNomEmploye())
                 .groupes(employeDto.getGroupes())
+                .email(employeDto.getEmail())
+                .password(employeDto.getPassword())
                 .employeSup(employeDto.getEmployeSup())
                 .build();
         employeRepository.save(employe);
@@ -35,7 +37,7 @@ public class EmployeService {
 
     @Transactional
     public void deleteEmploye(Long codeEmploye) {
-        // Étape 1: Supprimer les références dans la table `operation`
+        // Étape 1: Supprimer les références dans la table operation
         operationRepository.deleteByEmploye_CodeEmploye(codeEmploye);
 
         // Étape 2: Supprimer l'employé
@@ -43,12 +45,24 @@ public class EmployeService {
     }
 
     @Transactional
-    public Employe addEmploye(String nomEmploye, Employe employeSup) {
-        Employe employe=Employe.builder().nomEmploye(nomEmploye).employeSup(employeSup).build();
-        employe=employeRepository.save(employe);
-        return employe;
+    public Employe addEmploye(String nomEmploye, Long employeSupId,String email,String password,String role) {
+        Employe employeSup = null;
+
+        // Vérifier si l'ID de l'employé supérieur est non nul
+        if (employeSupId != null) {
+            employeSup = employeRepository.findById(employeSupId)
+                    .orElse(null); // Récupérer l'employé supérieur à partir de l'ID
+        }
+
+        Employe employe = Employe.builder()
+                .nomEmploye(nomEmploye)
+                .email(email)
+                .password(password)
+                .role(role)
+                .employeSup(employeSup)
+                .build();
+
+        return employeRepository.save(employe);
     }
-
-
 
 }

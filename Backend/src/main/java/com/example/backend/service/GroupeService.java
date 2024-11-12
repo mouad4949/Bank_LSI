@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 
 import com.example.backend.dto.GroupeDto;
+import com.example.backend.model.Client;
 import com.example.backend.model.Employe;
 import com.example.backend.model.Groupe;
 import com.example.backend.repositories.EmployeRepository;
@@ -9,6 +10,8 @@ import com.example.backend.repositories.GroupeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,6 +60,29 @@ public class GroupeService {
 
         // Sauvegarder l'employé mis à jour
         employeRepository.save(employe);
+    }
+
+    public List<Employe> getEmployesByGroupId(Long groupId) {
+        Groupe groupe = groupeRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Groupe introuvable avec l'ID : " + groupId));
+
+        return new ArrayList<>(groupe.getEmployes());
+    }
+
+    public void deleteGroup(Long groupId) {
+        Groupe groupe = groupeRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Groupe introuvable avec l'ID : " + groupId));
+
+        // Remove the associations with employees first
+        groupe.getEmployes().clear();
+
+        // Delete the group
+        groupeRepository.delete(groupe);
+    }
+
+    public Groupe getGroup(Long groupId) {
+        return groupeRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Groupe introuvable avec l'ID : " + groupId));
     }
 
 //    public void affecterEmployes(Long codeGroupe, List<Long> employeIds) {

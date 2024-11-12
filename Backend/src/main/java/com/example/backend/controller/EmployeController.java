@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(value = "/api/employe")
+@CrossOrigin(origins = "http://localhost:3000")
 public class EmployeController {
     private final EmployeService employeService;
 
@@ -24,18 +25,26 @@ public class EmployeController {
     @PostMapping
     public ResponseEntity<Employe> createEmploye(@RequestBody AddEmployeRequest addEmployeRequest) {
         try {
-            Employe employe = employeService.addEmploye(addEmployeRequest.getNomEmploye(), addEmployeRequest.getEmployeSup());
+            Employe employe = employeService.addEmploye(
+                    addEmployeRequest.getNomEmploye(),
+                    addEmployeRequest.getEmployeSup(),
+                    addEmployeRequest.getEmail(),
+                    addEmployeRequest.getPassword(),
+                    addEmployeRequest.getRole()
+                    // Passer l'ID au lieu de l'objet
+            );
             return ResponseEntity.ok(employe);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }
     }
-//
+    //
 //    @PostMapping
 //    public void addEmploye(@RequestBody EmployeDto employeDto)
 //    {
 //        employeService.addEmploye(employeDto);
 //    }
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping
     public ResponseEntity<List<Employe>> getAllEmploye() {
         try {

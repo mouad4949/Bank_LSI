@@ -12,8 +12,9 @@ import java.util.Collection;
 @NoArgsConstructor
 
 public class AddEmployeRequest {
-    private Long codeEmploye;
     private String nomEmploye;
-    private Employe employeSup;
-    private Collection<Groupe> groupes;
+    private String email;
+    private String password;
+    private Long employeSup;
+    private String role;
 }

@@ -1,27 +1,26 @@
-import './App.css';
-import ListCompte from './pages/ListCompte'
-import Navbar from './Components/Navbar';
-import { Routes , Route } from 'react-router-dom';
-import Clients from './pages/Clients';
-import Comptes from './pages/Comptes';
-import Employes from './pages/Employes';
-import Operations from './pages/Operations';
-import Groups from './pages/Groups';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Emp from "./Emp";
+import EmpSup from "./EmpSup";
+import Employes from "./pages/Employes"
+import Groups from "./pages/Groups";
+import Clients from "./pages/Clients";
+import Comptes from "./pages/Comptes";
+import Operations from "./pages/Operations";
 function App() {
   return (
-   <>
-   <Navbar/>
-    <Routes>
-      <Route path='/clients' element={<Clients/>}/>
-      <Route path='/compts' element={<Comptes/>}/>
-      <Route path='/employes' element={<Employes/>}/>
-      <Route path='/operations' element={<Operations/>}/>
-      <Route path='/groups' element={<Groups/>}/>
-
-
-    </Routes>
-   </>
+   
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/employe" element={<Emp />} />
+        <Route path="/employe-superieur" element={<EmpSup />} />
+        <Route path="/employes" element={<Employes/>}/>
+        <Route path="/groups" element={<Groups/>}/>
+        <Route path="/clients" element={<Clients/>}/>
+        <Route path="/compts" element={<Comptes/>}/>
+        <Route path="/operations" element={<Operations/>}/>
+      </Routes>
+    
   );
 }
 

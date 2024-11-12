@@ -30,4 +30,7 @@ public class Client implements Serializable {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     @JsonIgnore
     private Collection<Compte> comptes;
+
+    private String email;
+    private String password;
 }
